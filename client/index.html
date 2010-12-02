@@ -1,0 +1,142 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>JSP Page</title>
+        <link type="text/css" href="css/custom-theme/jquery-ui-1.8.6.custom.css" rel="stylesheet" />
+        <link type="text/css" href="css/demo_table_jui.css" rel="stylesheet" />
+        <script type="text/javascript" src="js/jquery-1.4.4.min.js"></script>
+        <script type="text/javascript" src="js/jquery-ui-1.8.6.custom.min.js"></script>
+        <script type="text/javascript" src="js/jquery.dataTables.min.js"></script>
+        <style type="text/css" >
+            .center {
+                width: 50%;
+                margin: auto;
+            }
+            .text {
+                float: right;
+            }
+        </style>
+    </head>
+    <body>
+        <script type="text/javascript">
+            $(function(){
+                $("#tabela").dataTable({
+                    "bJQueryUI": true,
+                    "sPaginationType": "full_numbers"
+                });
+                $("#dialog").dialog({
+                    autoOpen: false,
+                    modal:true,
+                    buttons: {
+                        "Confirmar" : function() {
+                            $("#dialog_form").submit();
+                        }
+                    }
+                });
+                $("#search").dialog({
+                    autoOpen: false,
+                    modal:true,
+                    buttons: {
+                        "Procurar" : function() {
+                            $("#search").find("form").submit();
+                        }
+                    }
+                });
+            });
+
+            function atualizar (id, descricao, preco, estoque) {
+                $("#codigo").val(id);
+                $("#codigo").attr("readonly", true);
+                $("#descricao").val(descricao);
+                $("#preco").val(preco);
+                $("#estoque").val(estoque);
+                $("#operacao").val("update");
+                $("#dialog").dialog("open");
+            }
+            function cadastrar () {
+                $("#codigo").val("");
+                $("#codigo").removeAttr("readonly");
+                $("#descricao").val("");
+                $("#preco").val("");
+                $("#estoque").val("");
+                $("#operacao").val("new");
+                $("#dialog").dialog("open");
+            }
+            function remover (id, descricao, preco, estoque) {
+                $("#codigo").val(id);
+                $("#codigo").attr("readonly",true);
+                $("#descricao").val(descricao);
+                $("#preco").val(preco);
+                $("#estoque").val(estoque);
+                $("#operacao").val("delete");
+                $("#dialog").dialog("open");
+            }
+            function pesquisar() {
+                $("#search").dialog("open");
+            }
+
+        </script>
+        <div id="search" title="Procurar">
+            <form action="index" method="GET">
+                    <div>
+                        <label for="codigo">Codigo</label>
+                        <input type="text" name="q" class="text ui-widget-content ui-corner-all" />
+                        <div class="ui-helper-clearfix"></div>
+                    </div>
+            </form>
+        </div>
+        <div class="dialog" id="dialog">
+            <form method="POST" action="index" id="dialog_form">
+                <input type="hidden" name="operacao" id="operacao" value="new" />
+                <fieldset>
+                    <div>
+                        <label for="codigo">Codigo</label>
+                        <input type="text" id="codigo" name="codigo" class="text ui-widget-content ui-corner-all" />
+                        <div class="ui-helper-clearfix"></div>
+                    </div>
+                    <div>
+                        <label for="descricao">Descrição</label>
+                        <input type="text" id="descricao" name="descricao" class="text ui-widget-content ui-corner-all" />
+                        <div class="ui-helper-clearfix"></div>
+                    </div>
+                    <div>
+                        <label for="preco">Preço</label>
+                        <input type="text" id="preco" name="preco" class="text ui-widget-content ui-corner-all" />
+                        <div class="ui-helper-clearfix"></div>
+                    </div>
+                    <div>
+                        <label for="estoque">Estoque</label>
+                        <input type="text" id="estoque" name="estoque" class="text ui-widget-content ui-corner-all" />
+                        <div class="ui-helper-clearfix"></div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+        <div class="center">
+            <table id="tabela" class="display">
+                <thead>
+                    <tr><th>Codigo</th><th>Descrição</th><th>Preço</th><th>Estoque</th><th></th><th></th></tr>
+                </thead>
+                <tbody>
+                    <c:forEach items="${requestScope.results}" var="item">
+                        <tr>
+                            <td>${item.codigo}</td>
+                            <td>${item.descricao}</td>
+                            <td>R$ ${item.preco}</td>
+                            <td>${item.estoque}</td>
+                            <td><input type="button" class="button" value="Atualizar" onclick="atualizar('${item.codigo}','${item.descricao}','${item.preco}','${item.estoque}')"/></td>
+                            <td><input type="button" class="button" value="Remover" onclick="remover('${item.codigo}','${item.descricao}','${item.preco}','${item.estoque}')"/></td></tr>
+                    </c:forEach>
+                </tbody>
+                <tfoot>
+                    <tr><th></th><th></th><th></th><th></th><th></th><th></th></tr>
+                </tfoot>
+            </table>
+            <input type="button" class="button" value="Novo Registro" onclick="cadastrar()"/>
+            <input type="button" class="button" value="Pesquisar" onclick="pesquisar()"/>
+        </div>
+    </body>
+</html>
