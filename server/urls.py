@@ -1,11 +1,14 @@
 from django.conf.urls.defaults import*
-from server.views import ProdutoRest
+from server import views
 
-# Uncomment the next two lines to enable the admin:
-# from django.contrib import admin
-# admin.autodiscover()
+from django.contrib import admin
+admin.autodiscover()
+
 
 urlpatterns = patterns('',
-    # Example:
-    (r'^produto/', ProdutoRest()),
+    (r'^produto/$', views.ProdutoView()),
+    (r'^produto\.(?P<formato>\w+)/$', views.ProdutoView()),
+    (r'^produto/(?P<codigo>\d+)/$', views.ProdutoView()),
+    (r'^produto\.(?P<formato>\w+)/(?P<codigo>\d+)/$', views.ProdutoView()),
+    (r'^admin/', include(admin.site.urls)),
 )

@@ -3,12 +3,15 @@ from server import restful
 from django.core import serializers
 from server.models import Produto
 
-class ProdutoRest(restful.RestView):
-    def get(self, request):
-        if (not 'codigo' in request.GET):
-            return HttpResponse(serializers.serialize("xml", Produto.objects.all()))
+class ProdutoView(restful.RestView):
+    def get(self, request, codigo="0", formato="xml"):
+        print codigo
+        
+        if (codigo == "0"):
+            return HttpResponse(serializers.serialize(formato, Produto.objects.all()), mimetype="application/"+formato)
         else:
-            return HttpResponse(serializers.serialize("xml", Produto.objects.get(codigo=request.GET['codigo'])))
+            print codigo
+            return HttpResponse(serializers.serialize(formato, Produto.objects.filter(codigo=codigo)),mimetype="application/"+formato)
 
     def post(self,request):
-        return HttpResponse(serializers.serialize("xml", Produto.objects.all()))
+        return HttpResponse(serializers.serialize(formato, Produto.objects.all()),mimetype="application/"+formato)
