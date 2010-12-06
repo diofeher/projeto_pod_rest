@@ -8,7 +8,7 @@ class ProdutoView(restful.RestView):
         print codigo
         
         if (codigo == "0"):
-            return HttpResponse(serializers.serialize(formato, Produto.objects.all()), mimetype="application/"+formato)
+            return HttpResponse(serializers.serialize(formato, Produto.objects.all()))
         else:
             print codigo
             return HttpResponse(serializers.serialize(formato, Produto.objects.filter(codigo=codigo)),mimetype="application/"+formato)
