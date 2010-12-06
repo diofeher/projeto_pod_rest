@@ -5,8 +5,8 @@ from server.models import Produto
 
 class ProdutoView(restful.RestView):
     def get(self, request, codigo="0", formato="xml"):
-        print codigo
-        
+        print request.GET
+        print request.POST
         if (codigo == "0"):
             return HttpResponse(serializers.serialize(formato, Produto.objects.all()))
         else:
@@ -14,4 +14,17 @@ class ProdutoView(restful.RestView):
             return HttpResponse(serializers.serialize(formato, Produto.objects.filter(codigo=codigo)),mimetype="application/"+formato)
 
     def post(self,request):
-        return HttpResponse(serializers.serialize(formato, Produto.objects.all()),mimetype="application/"+formato)
+        print request.GET
+        print request.POST
+        return HttpResponse("POST")
+
+    def put(self, request):
+        print request.GET
+        print request.POST
+        return HttpResponse("PUT")
+
+    def delete(self, request):
+        print request.GET
+        print request.POST
+        return HttpResponse("DELETE")
+
